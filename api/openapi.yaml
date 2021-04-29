@@ -1,0 +1,82 @@
+openapi: 3.0.3
+info:
+  description: API for sms-send functions
+  title: sms-client
+  version: 1.0.0
+servers:
+- description: DEVELOPMENT
+  url: http://localhost:9003/api/v1
+- description: STAGING
+  url: https://celman.nvt-it.pl/public/api/v1
+- description: PRODUCTION
+  url: https://api.celman.com/public/api/v1
+security:
+- ApiKeyAuth: []
+paths:
+  /sms/send:
+    post:
+      operationId: sms-send
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SmsSendRequest'
+        required: true
+      responses:
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SmsSendResponse'
+          description: A response to a text message send request.
+      summary: Send a text message request.
+      x-contentType: application/json
+      x-accepts: application/json
+components:
+  responses:
+    SmsSendResponse:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/SmsSendResponse'
+      description: A response to a text message send request.
+  schemas:
+    SmsSendRequest:
+      description: The structure to describe a request to send a text message.
+      example:
+        senderName: senderName
+        phone: phone
+        source: source
+        body: body
+      properties:
+        senderName:
+          type: string
+        body:
+          type: string
+        phone:
+          type: string
+        source:
+          type: string
+      required:
+      - body
+      - phone
+      - senderName
+      - source
+      type: object
+    SmsSendResponse:
+      description: The structure to describe a response to a text message send request.
+      example:
+        success: true
+        errorMessage: errorMessage
+      properties:
+        success:
+          type: boolean
+        errorMessage:
+          type: string
+      type: object
+  securitySchemes:
+    ApiKeyAuth:
+      in: header
+      name: X-Auth-Token
+      type: apiKey
+
